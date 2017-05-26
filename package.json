@@ -4,7 +4,7 @@
   "description": "Allows to get main js files from installed node modules",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/jasmine"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/Blinnikov/gulp-main-node-files/issues"
   },
-  "homepage": "https://github.com/Blinnikov/gulp-main-node-files#readme"
+  "homepage": "https://github.com/Blinnikov/gulp-main-node-files#readme",
+  "devDependencies": {
+    "jasmine": "^2.6.0"
+  }
 }
