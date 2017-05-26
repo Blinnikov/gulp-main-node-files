@@ -7,8 +7,8 @@ const defaultMainFile = 'index.js';
 function getMainNodeFiles() {
     const packageJson = _getPackageJson(packageJsonPath);
 
-    return packageJson.dependencies
-        .map(dep => _getMainPackageFile(`${nodeModulesPath}/${dep}`));
+    return Object.keys(packageJson.dependencies)
+        .map(key => _getMainPackageFile(`${nodeModulesPath}/${key}`));
 }
 
 function _getMainPackageFile(modulePath) {
