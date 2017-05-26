@@ -1,0 +1,26 @@
+{
+  "name": "gulp-main-node-files",
+  "version": "1.0.0",
+  "description": "Allows to get main js files from installed node modules",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blinnikov/gulp-main-node-files.git"
+  },
+  "keywords": [
+    "gulp",
+    "npm",
+    "node",
+    "nodejs",
+    "node_modules"
+  ],
+  "author": "Igor Blinnikov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Blinnikov/gulp-main-node-files/issues"
+  },
+  "homepage": "https://github.com/Blinnikov/gulp-main-node-files#readme"
+}
