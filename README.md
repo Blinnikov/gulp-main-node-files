@@ -42,7 +42,7 @@ You can pass in the ```options``` object to customize function behavior with the
       overrides: {
         'packery': 'dist/packery.pkgd.js'
       }
-    }
+    })
     ```
   - or if you want to return several main files:
   ``` javascript
