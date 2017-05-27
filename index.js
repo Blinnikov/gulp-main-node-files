@@ -17,8 +17,7 @@ function getMainNodeFiles(options) {
 		return result;
 	}
 	
-	Object
-		.keys(packageJson.dependencies)
+	Object.keys(packageJson.dependencies)
 		.forEach(key => {
 			if(config.overrides && config.overrides[key]) {
 				const overridenPaths = _getOverridenPaths(config, key);
