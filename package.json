@@ -1,6 +1,6 @@
 {
   "name": "gulp-main-node-files",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Allows to get main js files from installed node modules",
   "main": "index.js",
   "scripts": {
