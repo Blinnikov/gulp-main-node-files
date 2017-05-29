@@ -1,34 +1,45 @@
-var fs = require('fs');
+const fs = require('fs');
+const firstBy = require('thenby');
 
 const defaultConfig = {
 	packageJsonPath: './package.json',
 	nodeModulesPath: './node_modules'
 };
 
+const maxOrder = Number.MAX_SAFE_INTEGER;
 const defaultMainFile = 'index.js';
 
 function getMainNodeFiles(options) {
 	const config = Object.assign(defaultConfig, options);
 	const packageJson = _getPackageJson(config.packageJsonPath);
-	
-	var result = [];
-	
 	if(!packageJson.dependencies) {
-		return result;
+		return [];
 	}
 	
-	Object.keys(packageJson.dependencies)
-		.forEach(key => {
+	var packages = Object.keys(packageJson.dependencies)
+		.map(key => {
+			const package = _getDefaultPackageDescription(config, key);
+
 			if(config.overrides && config.overrides[key]) {
-				const overridenPaths = _getOverridenPaths(config, key);
-				result.push.apply(result, overridenPaths);
-			} else {
-				var defaultMainPackageFile = _getMainPackageFile(`${config.nodeModulesPath}/${key}`);
-				result.push(defaultMainPackageFile);
+				package.main = _getOverridenPaths(config, key);
 			}
+
+			if(config.order && Number.isInteger(config.order[key])) {
+				package.order = config.order[key];
+			}
+
+			return package;
 	});
 	
-	return result;
+	return _getOrderedPaths(packages);
+}
+
+function _getDefaultPackageDescription(config, key) {
+	return {
+		key,
+		main: _getMainPackageFile(`${config.nodeModulesPath}/${key}`),
+		order: maxOrder
+	}
 }
 
 function _getMainPackageFile(modulePath) {
@@ -52,6 +63,21 @@ function _getOverridenPaths(config, key) {
 	} else {
 		return [`${config.nodeModulesPath}/${key}/${mainOverrides}`];
 	}
+}
+
+function _getOrderedPaths(packages) {
+  const result = []
+	packages
+	  .sort(firstBy("order").thenBy("key"))
+	  .forEach(pckg => {
+      if(Array.isArray(pckg.main)) {
+        result.push.apply(result, pckg.main);
+      } else {
+        result.push(pckg.main);
+      }
+    });
+
+	return result;
 }
 
 module.exports = getMainNodeFiles;
