@@ -56,3 +56,13 @@ You can pass in the ```options``` object to customize function behavior with the
     }
   })
   ```
+- **order** (no default value) - the object that allows to specify returned main files order.
+  For example, if you further inject returned files into ```html``` and want to connect jquery before any other libraries.
+  ``` javascript
+  mainNodeFiles({
+    order: {
+      'jquery': 1,
+      'angular': 2
+    }
+  })
+  ```
