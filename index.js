@@ -1,16 +1,16 @@
 const fs = require('fs');
 const firstBy = require('thenby');
 
-const defaultConfig = {
+const defaultConfig = Object.freeze({
 	packageJsonPath: './package.json',
 	nodeModulesPath: './node_modules'
-};
+});
 
 const maxOrder = Number.MAX_SAFE_INTEGER;
 const defaultMainFile = 'index.js';
 
 function getMainNodeFiles(options) {
-	const config = Object.assign(defaultConfig, options);
+	const config = Object.assign({}, defaultConfig, options);
 	const packageJson = _getPackageJson(config.packageJsonPath);
 	if(!packageJson.dependencies) {
 		return [];
@@ -31,7 +31,8 @@ function getMainNodeFiles(options) {
 			return package;
 	});
 	
-	return _getOrderedPaths(packages);
+  const shouldSort = config.order && Object.keys(config.order).length > 0;
+	return _getOrderedPaths(packages, shouldSort);
 }
 
 function _getDefaultPackageDescription(config, key) {
@@ -65,19 +66,18 @@ function _getOverridenPaths(config, key) {
 	}
 }
 
-function _getOrderedPaths(packages) {
-  const result = []
-	packages
-	  .sort(firstBy("order").thenBy("key"))
-	  .forEach(pckg => {
+function _getOrderedPaths(packages, shouldSort) {
+  const result = [];
+  var sortedPackages = shouldSort ? packages.sort(firstBy("order").thenBy("key")) : packages;
+  sortedPackages
+  	.forEach(pckg => {
       if(Array.isArray(pckg.main)) {
         result.push.apply(result, pckg.main);
       } else {
         result.push(pckg.main);
       }
     });
-
-	return result;
+  return result;
 }
 
 module.exports = getMainNodeFiles;

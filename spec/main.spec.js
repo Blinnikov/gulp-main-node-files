@@ -182,4 +182,20 @@ describe("Main node files", function() {
       ]);
    });
 
+   it('should not changed order of packages specified in package.json if order option is empty', () => {
+    let options = {
+      packageJsonPath: './spec/standard-reversed.package.json',
+      nodeModulesPath: './spec/test_node_modules',
+      order: { }
+    };
+    let files = getMainNodeFiles(options);
+
+    console.log('Main files', files);
+
+    expect(files).toEqual([
+      './spec/test_node_modules/test-module-4/index.js',
+      './spec/test_node_modules/test-module-3/index.js'
+      ]);
+   });
+
 });
