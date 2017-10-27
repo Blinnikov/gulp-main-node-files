@@ -27,6 +27,7 @@
     "jasmine": "^2.6.0"
   },
   "dependencies": {
+    "path.join": "^1.0.0",
     "thenby": "^1.2.3"
   }
 }

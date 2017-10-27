@@ -1,4 +1,4 @@
-describe("Main node files", function() {
+describe("Main node files", function () {
   const getMainNodeFiles = require('../');
 
   it('should not throw with missed dependencies section', () => {
@@ -63,7 +63,7 @@ describe("Main node files", function() {
     expect(files).toEqual([
       './spec/test_node_modules/test-module-2/main.js',
       './spec/test_node_modules/test-module-2/index.js'
-      ]);
+    ]);
   });
 
   it('should return ordered array if order option specified', () => {
@@ -80,7 +80,7 @@ describe("Main node files", function() {
     expect(files).toEqual([
       './spec/test_node_modules/test-module-4/index.js',
       './spec/test_node_modules/test-module-3/index.js'
-      ]);
+    ]);
   });
 
   it('should return alphabetically ordered array for the same specified order option values', () => {
@@ -97,8 +97,8 @@ describe("Main node files", function() {
     expect(files).toEqual([
       './spec/test_node_modules/test-module-3/index.js',
       './spec/test_node_modules/test-module-4/index.js'
-      ]);
-   });
+    ]);
+  });
 
   it('should return ordered array with packages without specified order', () => {
     const options = {
@@ -111,7 +111,7 @@ describe("Main node files", function() {
     const files = getMainNodeFiles(options);
 
     expect(files.length).toEqual(2);
-   });
+  });
 
   it('should return ordered array with packages without specified order at the end', () => {
     const options = {
@@ -125,7 +125,7 @@ describe("Main node files", function() {
 
     expect(files[0]).toEqual('./spec/test_node_modules/test-module-4/index.js');
     expect(files[1]).toEqual('./spec/test_node_modules/test-module-3/index.js');
-   });
+  });
 
   it('should not return packages that specified in order option but are really absent', () => {
     const options = {
@@ -138,7 +138,7 @@ describe("Main node files", function() {
     const files = getMainNodeFiles(options);
 
     expect(files).not.toContain('./spec/test_node_modules/test-module-5/index.js');
-   });
+  });
 
   it('should support both overrides and order', () => {
     const options = {
@@ -158,8 +158,8 @@ describe("Main node files", function() {
     expect(files).toEqual([
       './spec/test_node_modules/test-module-4/main-4.js',
       './spec/test_node_modules/test-module-3/main-3.js'
-      ]);
-   });
+    ]);
+  });
 
   it('should support both overrides with array and order', () => {
     const options = {
@@ -179,23 +179,80 @@ describe("Main node files", function() {
       './spec/test_node_modules/test-module-4/main.js',
       './spec/test_node_modules/test-module-4/index.js',
       './spec/test_node_modules/test-module-3/index.js'
-      ]);
-   });
+    ]);
+  });
 
-   it('should not changed order of packages specified in package.json if order option is empty', () => {
-    let options = {
+  it('should not changed order of packages specified in package.json if order option is empty', () => {
+    const options = {
       packageJsonPath: './spec/standard-reversed.package.json',
       nodeModulesPath: './spec/test_node_modules',
-      order: { }
+      order: {}
     };
-    let files = getMainNodeFiles(options);
-
-    console.log('Main files', files);
+    const files = getMainNodeFiles(options);
 
     expect(files).toEqual([
       './spec/test_node_modules/test-module-4/index.js',
       './spec/test_node_modules/test-module-3/index.js'
-      ]);
-   });
+    ]);
+  });
+
+  it('should support scoped packages', () => {
+    const options = {
+      packageJsonPath: './spec/scoped.package.json',
+      nodeModulesPath: './spec/test_node_modules'
+    };
+    const files = getMainNodeFiles(options);
+
+    expect(files).toEqual([
+      './spec/test_node_modules/@scoped/module-1/index.js'
+    ]);
+  });
+
+  it('should support overrides for scoped packages', () => {
+    const options = {
+      packageJsonPath: './spec/scoped.package.json',
+      nodeModulesPath: './spec/test_node_modules',
+      overrides: {
+        '@scoped/module-1': 'main.js'
+      },
+    };
+    const files = getMainNodeFiles(options);
+
+    expect(files).toEqual([
+      './spec/test_node_modules/@scoped/module-1/main.js'
+    ]);
+  });
+
+  it('should support array overrides for scoped packages', () => {
+    const options = {
+      packageJsonPath: './spec/scoped.package.json',
+      nodeModulesPath: './spec/test_node_modules',
+      overrides: {
+        '@scoped/module-1': ['main.js', 'index.js']
+      },
+    };
+    const files = getMainNodeFiles(options);
+
+    expect(files).toEqual([
+      './spec/test_node_modules/@scoped/module-1/main.js',
+      './spec/test_node_modules/@scoped/module-1/index.js',
+    ]);
+  });
+
+  it('should support relative paths in overrides for scoped packages', () => {
+    const options = {
+      packageJsonPath: './spec/scoped.package.json',
+      nodeModulesPath: './spec/test_node_modules',
+      overrides: {
+        '@scoped/module-1': ['../module-2/index.js', 'index.js']
+      },
+    };
+    const files = getMainNodeFiles(options);
+
+    expect(files).toEqual([
+      './spec/test_node_modules/@scoped/module-2/index.js',
+      './spec/test_node_modules/@scoped/module-1/index.js'
+    ]);
+  });
 
 });

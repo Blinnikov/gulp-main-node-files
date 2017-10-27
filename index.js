@@ -1,5 +1,6 @@
 const fs = require('fs');
 const firstBy = require('thenby');
+const pathJoin = require('path.join');
 
 const defaultConfig = Object.freeze({
 	packageJsonPath: './package.json',
@@ -60,7 +61,7 @@ function _getPackageJson(path) {
 function _getOverridenPaths(config, key) {
 	const mainOverrides = config.overrides[key];
 	if(Array.isArray(mainOverrides)) {
-		return mainOverrides.map(path => `${config.nodeModulesPath}/${key}/${path}`);
+		return mainOverrides.map(p => `./${pathJoin(config.nodeModulesPath, key, p)}`);
 	} else {
 		return [`${config.nodeModulesPath}/${key}/${mainOverrides}`];
 	}
