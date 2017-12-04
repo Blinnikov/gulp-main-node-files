@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@scoped/module-1": "1.0.0",
+    "@scoped/module-2": "1.0.0"
+  }
+}

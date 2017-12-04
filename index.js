@@ -4,7 +4,8 @@ const pathJoin = require('path.join');
 
 const defaultConfig = Object.freeze({
 	packageJsonPath: './package.json',
-	nodeModulesPath: './node_modules'
+	nodeModulesPath: './node_modules',
+	skip: {},
 });
 
 const maxOrder = Number.MAX_SAFE_INTEGER;
@@ -18,6 +19,7 @@ function getMainNodeFiles(options) {
 	}
 	
 	var packages = Object.keys(packageJson.dependencies)
+		.filter(key => !config.skip[key])
 		.map(key => {
 			const package = _getDefaultPackageDescription(config, key);
 

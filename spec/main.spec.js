@@ -255,4 +255,69 @@ describe("Main node files", function () {
     ]);
   });
 
+  it('should return all packages if skip section is empty in config', () => {
+    const options = {
+      packageJsonPath: './spec/main.skip.package.json',
+      nodeModulesPath: './spec/test_node_modules'
+    };
+    const files = getMainNodeFiles(options);
+
+    expect(files).toEqual([
+      './spec/test_node_modules/test-module-1/index.js',
+      './spec/test_node_modules/test-module-2/main.js',
+      './spec/test_node_modules/test-module-3/index.js',
+      './spec/test_node_modules/test-module-4/index.js',
+    ]);
+  });
+
+  it('should skip package if there\'s true value for this package in  skip section', () => {
+    const options = {
+      packageJsonPath: './spec/main.skip.package.json',
+      nodeModulesPath: './spec/test_node_modules',
+      skip: {
+        'test-module-1': true
+      }
+    };
+    const files = getMainNodeFiles(options);
+
+    expect(files).toEqual([
+      './spec/test_node_modules/test-module-2/main.js',
+      './spec/test_node_modules/test-module-3/index.js',
+      './spec/test_node_modules/test-module-4/index.js',
+    ]);
+  });
+
+  it('should not skip package if there\'s false value for this package in  skip section', () => {
+    const options = {
+      packageJsonPath: './spec/main.skip.package.json',
+      nodeModulesPath: './spec/test_node_modules',
+      skip: {
+        'test-module-1': false
+      }
+    };
+    const files = getMainNodeFiles(options);
+
+    expect(files).toEqual([
+      './spec/test_node_modules/test-module-1/index.js',
+      './spec/test_node_modules/test-module-2/main.js',
+      './spec/test_node_modules/test-module-3/index.js',
+      './spec/test_node_modules/test-module-4/index.js',
+    ]);
+  });
+
+  it('should support skipping for scoped packages', () => {
+    const options = {
+      packageJsonPath: './spec/scoped.skip.package.json',
+      nodeModulesPath: './spec/test_node_modules',
+      skip: {
+        '@scoped/module-1': true,
+      }
+    };
+    const files = getMainNodeFiles(options);
+
+    expect(files).toEqual([
+      './spec/test_node_modules/@scoped/module-2/index.js',
+    ]);
+  });
+
 });
