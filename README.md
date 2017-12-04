@@ -66,3 +66,22 @@ You can pass in the ```options``` object to customize function behavior with the
     }
   })
   ```
+  
+- **skip** (no default value) - the object which keys represent packages user wants to skip (value for a key should be truthy, if value is falsy, it's the same situation when key is absent at all - package won't be skipped).
+For example, if you want to build hybrid angular app, you can bundle AngularJS files with **gulp-main-node-files** and leave Angular ones as is.
+``` javascript
+  mainNodeFiles({
+    skip: {
+      'angular': false,
+      '@angular/common': true,
+      '@angular/compiler': true,
+      '@angular/core': true,
+      '@angular/forms': true,
+      '@angular/http': true,
+      '@angular/platform-browser': true,
+      '@angular/platform-browser-dynamic': true,
+      '@angular/router': true,
+      '@angular/upgrade': true,
+    }
+  })
+  ```
